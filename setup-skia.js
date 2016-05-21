@@ -5,7 +5,7 @@ var os = require('os').platform()
 var depotDir = path.join(__dirname, 'depot_tools')
 var binDir = path.join(__dirname, 'bin')
 var envPathSep = os === 'win32' ? ';' : ':'
-console.log(process.env)
+
 var env = {
   PATH: process.env.PATH + envPathSep + depotDir + envPathSep + binDir,
   NUMBER_OF_PROCESSORS: process.env.NUMBER_OF_PROCESSORS,
