@@ -1,6 +1,6 @@
 solutions = [
   { "name"        : "skia",
-    "url"         : "https://skia.googlesource.com/skia@1a3619236b5363821b58698a8731168803bd29fe",
+    "url"         : "https://github.com/tmpvar/skia.cc.git@6e36ba7bf19cc7597837bb0416882ad4d699916b",
     "deps_file"   : "DEPS",
     "managed"     : False,
     "custom_deps" : {
