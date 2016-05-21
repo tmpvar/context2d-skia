@@ -3,6 +3,6 @@
   "version": "0.0.0",
   "main": "skia.js",
   "scripts": {
-    "install": "depot_tools/gclient sync && node setup-skia.js"
+    "install": "python depot_tools/gclient.py sync && node setup-skia.js"
   }
 }
