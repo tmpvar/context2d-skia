@@ -6,15 +6,11 @@ var depotDir = path.join(__dirname, 'depot_tools')
 var binDir = path.join(__dirname, 'bin')
 var envPathSep = os === 'win32' ? ';' : ':'
 console.log(process.env)
-var env = {//Object.assign({}, process.env, {
+var env = {
   PATH: process.env.PATH + envPathSep + depotDir + envPathSep + binDir,
   NUMBER_OF_PROCESSORS: process.env.NUMBER_OF_PROCESSORS,
   TMP: process.env.TMP
 }
-//})
-
-mkdirp.sync(path.join(__dirname, 'out', 'Debug'))
-mkdirp.sync(path.join(__dirname, 'out', 'Release'))
 
 console.log('# pulling down skia, this may take a bit')
 spawn('python', [path.join(depotDir, 'gclient.py'), 'sync'], {
