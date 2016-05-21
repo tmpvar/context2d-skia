@@ -1,22 +1,40 @@
-const spawn = require('child_process').spawn
-const path = require('path')
+var spawn = require('child_process').spawn
+var path = require('path')
+var mkdirp = require('mkdirp')
+var os = require('os').platform()
+var depotDir = path.join(__dirname, 'depot_tools')
+var binDir = path.join(__dirname, 'bin')
+var envPathSep = os === 'win32' ? ';' : ':'
+console.log(process.env)
+var env = {//Object.assign({}, process.env, {
+  PATH: process.env.PATH + envPathSep + depotDir + envPathSep + binDir,
+  NUMBER_OF_PROCESSORS: process.env.NUMBER_OF_PROCESSORS,
+  TMP: process.env.TMP
+}
+//})
 
-const depotDir = path.join(__dirname, 'depot_tools')
+mkdirp.sync(path.join(__dirname, 'out', 'Debug'))
+mkdirp.sync(path.join(__dirname, 'out', 'Release'))
 
-const env = Object.assign({}, process.env, {
-  PATH: process.env.PATH + ':' + depotDir
-})
-
-console.log('# prepare skia for building')
-spawn('python', ['bin/sync-and-gyp'], {
-  cwd: path.join(__dirname, 'skia'),
+console.log('# pulling down skia, this may take a bit')
+spawn('python', [path.join(depotDir, 'gclient.py'), 'sync'], {
+  cwd: path.join(__dirname),
   env: env,
   stdio: 'inherit'
 }).on('exit', function() {
-  console.log('# building skia_lib')
-  spawn('ninja', ['-C', 'out/Debug', 'skia_lib'], {
+  process.chdir( path.join(__dirname, 'skia'))
+  console.log('# prepare skia for building')
+  //spawn('python', ['gyp_skia', '--verbose'], {
+  spawn('python', ['gyp_skia'], {
     cwd: path.join(__dirname, 'skia'),
     env: env,
     stdio: 'inherit'
+  }).on('exit', function() {
+    console.log('# building skia_lib')
+    spawn('ninja', ['-C', 'out/Debug', 'skia_lib', '-v'], {
+      cwd: path.join(__dirname, 'skia'),
+      env: env,
+      stdio: 'inherit'
+    })
   })
 })
